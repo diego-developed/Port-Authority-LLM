@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "ragagent"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [
+    { include = "app" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "*"
+python-dotenv = "*"
+langchain-community = "*"
+langchain_huggingface = "*"
+langchain-core = "*"
+uvicorn = "*"
+chardet = "*"
+chromadb = "*"
+langchain_chroma = "*"
+langchain-postgres = "*"
+psycopg = { version = "*", extras = ["binary"] }
+psycopg2-binary = "*"
+python-multipart = "*"
+markitdown = "*"
+unstructured = { version = "*", extras = ["md"] }
+
+[tool.poetry.group.dev.dependencies]
+langchain-cli = ">=0.0.15"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
