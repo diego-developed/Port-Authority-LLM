@@ -1,1 +1,3 @@
-backend/.env
+server/.env
+server/app/chromadb
+server/app/uploaded_files
