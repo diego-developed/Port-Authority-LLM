@@ -3,7 +3,6 @@ from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from langchain_huggingface import HuggingFaceEmbeddings, ChatHuggingFace 
 from langchain_chroma import Chroma
 from langchain_core.runnables import RunnablePassthrough, RunnableSequence
 from langchain_core.output_parsers import StrOutputParser
@@ -19,7 +18,10 @@ import tempfile
 from fastapi import HTTPException
 from langchain_community.vectorstores.utils import filter_complex_metadata
 
-logging.basicConfig(level=logging.INFO)
+import warnings
+warnings.simplefilter("ignore", category=Warning)
+
+#logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
 
@@ -60,8 +62,7 @@ search_prompt = PromptTemplate(
     template="Given the query, create a concise semantic search query to obtain relevant documents from a vector database: {input}"
 )
 
-reasoning_llm = ChatOllama(model="deepseek-r1:8b")
-llm = ChatOllama(model="qwen2.5:7b")
+llm = ChatOllama(model="qwen2.5:7b", temperature=0)
 
 chain = (
     similarity_prompt
@@ -122,7 +123,8 @@ async def search(query: str = Form(...)):
     try:
         store = get_store()
         query_refinement = search_prompt.format(input=query)
-        refined_query = reasoning_llm.invoke(query_refinement)
+        refined_query = llm.invoke(query_refinement)
+        print(f"Refined query: {refined_query.content}")
 
         docs = store.similarity_search(refined_query.content, k=max_k)
 
