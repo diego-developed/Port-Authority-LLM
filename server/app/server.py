@@ -145,5 +145,17 @@ async def list_documents_cdb():
     documents = [{"content": c, "metadata": m} for m, c in zip(docs["metadatas"], docs["documents"])]
     return JSONResponse(content={"documents": documents}, status_code=200)
 
+@app.post("/reset_chromadb")
+async def reset_chromadb():
+    logging.info("Resetting ChromaDB...")
+    try:
+        store = get_store()
+        store.reset_collection()
+        logging.info("ChromaDB reset successfully.")
+        return JSONResponse(content={"status": "ChromaDB reset successfully"}, status_code=200)
+    except Exception as e:
+        logging.error(f"Error resetting ChromaDB: {e}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)
