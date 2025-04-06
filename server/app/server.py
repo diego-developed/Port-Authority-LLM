@@ -54,7 +54,7 @@ def get_store():
 
 similarity_prompt = PromptTemplate(
     input_variables=["input", "docs"],
-    template="Use the following documents to answer the question, citing the source document: {docs}\nQuestion: {input}\nAnswer:"
+    template="Use the following documents to answer the question, citing the source document and page number, noting that these citations are a requirement if anything from the document is used: {docs}\nQuestion: {input}\nAnswer:"
 )
 
 search_prompt = PromptTemplate(
@@ -98,12 +98,16 @@ async def upload_file(file: UploadFile = File(...)):
             temp_file_path = temp_file.name
 
         loader = UnstructuredMarkdownLoader(temp_file_path)
-        doc = loader.load()
+        doc_pages = loader.load()
+        # Add page numbers to each document (each representing a page)
+        for i, page in enumerate(doc_pages):
+            page.metadata.update({"page": i + 1})
         os.remove(temp_file_path)
 
         text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-        chunks = text_splitter.split_documents(doc)
+        chunks = text_splitter.split_documents(doc_pages)
 
+        # Add filename metadata to each chunk; page metadata is inherited
         for chunk in chunks:
             chunk.metadata.update({"filename": file.filename})
 
