@@ -45,7 +45,7 @@ UPLOADED_FILES_PATH = os.getenv("UPLOADED_FILES_PATH", "app/uploaded_files")
 if not os.path.exists(UPLOADED_FILES_PATH):
     os.makedirs(UPLOADED_FILES_PATH)
 if not os.path.exists(CDB_DIRECTORY_PATH):
-    os.makedirs(UPLOADED_FILES_PATH)
+    os.makedirs(CDB_DIRECTORY_PATH)
 
 max_k = int(os.getenv("MAX_K", 5))
 
@@ -59,7 +59,7 @@ similarity_prompt = PromptTemplate(
 
 search_prompt = PromptTemplate(
     input_variables=["input"],
-    template="Given the query, create a concise semantic search query to obtain relevant documents from a vector database: {input}"
+    template="Given the query, create a concise semantic search query to obtain relevant documents from a vector database. Return ONLY the relevant query, with no other text or quotation marks: {input}"
 )
 
 llm = ChatOllama(model="qwen2.5:7b", temperature=0)
