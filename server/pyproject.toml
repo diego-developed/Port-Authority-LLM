@@ -23,7 +23,7 @@ langchain-postgres = "*"
 psycopg = { version = "*", extras = ["binary"] }
 psycopg2-binary = "*"
 python-multipart = "*"
-markitdown = "*"
+markitdown = { version = "*", extras = ["pdf"] }
 unstructured = { version = "*", extras = ["md"] }
 
 [tool.poetry.group.dev.dependencies]
