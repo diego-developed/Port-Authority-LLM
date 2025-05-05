@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './App.css';
+import logo from './assets/PANYNJ_logo.png';
 
 function App() {
   const [query, setQuery] = useState('');
@@ -61,48 +62,47 @@ function App() {
     };
 
     return (
-      <div className="dashboard">
-        <div className="sidebar">
-          <h2>🗂️ Conversations</h2>
-          <p className="conversation-placeholder">No past conversations</p>
-        </div>
-  
-        <div className="app-container">
-          <header className="header">
-            <h1>📄 Legal Document Chatbot</h1>
-          </header>
-  
-          <div className="upload-section">
-            <form onSubmit={handleFileUpload}>
-              <input
-                type="file"
-                onChange={(e) => setSelectedFile(e.target.files[0])}
-              />
-              <button type="submit">Upload</button>
-            </form>
+      <main className="main-wrapper">
+  <div className="chat-container">
+    <header className="chat-header">
+     <img src={logo} alt="PANYNJ Logo" className="chat-logo" />
+    </header>
+
+
+    <div className="upload-form">
+      <form onSubmit={handleFileUpload}>
+        <input
+          type="file"
+          onChange={(e) => setSelectedFile(e.target.files[0])}
+        />
+        <button type="submit">Upload</button>
+      </form>
+    </div>
+
+    <div className="chat-window">
+      {chatLog.map((entry, idx) => (
+        <div key={idx} className={`chat-message ${entry.type}`}>
+          <div className="message-bubble">
+            <strong>{entry.type === 'user' ? 'You' : 'Bot'}:</strong> {entry.text}
           </div>
-  
-          <div className="chat-box">
-            {chatLog.map((entry, idx) => (
-              <div key={idx} className={`chat-entry ${entry.type}`}>
-                <strong>{entry.type === 'user' ? 'You' : 'Bot'}:</strong> {entry.text}
-              </div>
-            ))}
-            {isLoading && <div className="chat-entry bot">Bot is thinking...</div>}
-          </div>
-  
-          <form className="input-form" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              placeholder="Ask a legal question..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              disabled={isLoading}
-            />
-            <button type="submit" disabled={isLoading}>Send</button>
-          </form>
         </div>
-      </div>
+      ))}
+      {isLoading && <div className="chat-message bot loading">Bot is thinking...</div>}
+    </div>
+
+    <form className="chat-input" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Ask a legal question..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        disabled={isLoading}
+      />
+      <button type="submit" disabled={isLoading}>Send</button>
+    </form>
+  </div>
+</main>
+
     );  
 }
 
