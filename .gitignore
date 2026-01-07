@@ -1,3 +1,5 @@
 server/.env
 server/app/chromadb
 server/app/uploaded_files
+server/app/app/uploaded_files/
+*.pdf
